@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'OpeningFirstTime/loginpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,7 +42,7 @@ class MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       home: isFirstTime
-          ? const FirstTimePage(title: '')
+          ? const FirstTimePage()
           : const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
