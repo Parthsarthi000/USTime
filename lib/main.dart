@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'OpeningFirstTime/loginpage.dart';
+import 'OpeningFirstTime/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,9 +41,10 @@ class MyAppState extends State<MyApp> {
             seedColor: const Color.fromARGB(255, 36, 101, 127)),
         useMaterial3: true,
       ),
-      home: isFirstTime
-          ? const FirstTimePage()
-          : const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: isFirstTime
+      //     ? const FirstTimePage()
+      //     : const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const FirstTimePage(),
     );
   }
 }

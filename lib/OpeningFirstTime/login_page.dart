@@ -9,6 +9,8 @@ class FirstTimePage extends StatefulWidget {
 class FirstTimePageState extends State<FirstTimePage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp();
+    return Scaffold(
+      body: Container(),
+    );
   }
 }
