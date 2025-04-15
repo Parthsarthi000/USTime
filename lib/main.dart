@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'OpeningFirstTime/login_page.dart';
+// import 'OpeningFirstTime/login_page.dart';
+import 'home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,15 +37,15 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Broductivity',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 36, 101, 127)),
+      darkTheme: ThemeData(
         useMaterial3: true,
+        brightness: Brightness.dark,
       ),
+      themeMode: ThemeMode.dark,
       // home: isFirstTime
       //     ? const FirstTimePage()
       //     : const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: const FirstTimePage(),
+      home: const HomePage(),
     );
   }
 }

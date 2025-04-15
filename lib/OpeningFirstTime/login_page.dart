@@ -9,8 +9,15 @@ class FirstTimePage extends StatefulWidget {
 class FirstTimePageState extends State<FirstTimePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(),
-    );
+    return const Scaffold(
+        body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Welcome to BroDuctivity"),
+          Text("Your personalised Self-Improvement Buddy :)")
+        ],
+      ),
+    ));
   }
 }
