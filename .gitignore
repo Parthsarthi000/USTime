@@ -41,3 +41,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignore pc and macOS build folders
+linux/
+macos/
+windows/
+web/
