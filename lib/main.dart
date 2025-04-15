@@ -42,6 +42,7 @@ class MyAppState extends State<MyApp> {
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
       // home: isFirstTime
       //     ? const FirstTimePage()
       //     : const MyHomePage(title: 'Flutter Demo Home Page'),
