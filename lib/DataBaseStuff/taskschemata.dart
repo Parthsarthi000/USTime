@@ -5,32 +5,62 @@ enum Difficulty { easy, medium, hard }
 
 enum Importance { low, medium, high }
 
+enum RepeatType { noRepeat, daily, weekly }
+
 enum Type { fixed, canShift }
 
 enum Status { completed, toDo, missed }
 
-class Task {
-  Task(
-      this.eventName,
-      this.from,
-      this.to,
-      this.background,
-      this.isAllDay,
-      this.taskDifficulty,
-      this.taskType,
-      this.deadline,
-      this.taskImportance,
-      this.taskStatus);
+abstract class TaskInterface {
+  String get eventName;
+  DateTime get from;
+  DateTime get to;
+  Color get background;
+  bool get isAllDay;
+  Difficulty get taskDifficulty;
+  Type get taskType;
+  Importance get taskImportance;
+  Status get taskStatus;
+  DateTime get deadline;
+  RepeatType get repeatType;
+}
+
+class Task extends TaskInterface {
+  @override
   String eventName;
+  @override
   DateTime from;
+  @override
   DateTime to;
+  @override
   Color background;
+  @override
   bool isAllDay;
+  @override
   Difficulty taskDifficulty;
+  @override
   Type taskType;
+  @override
   Importance taskImportance;
+  @override
   Status taskStatus;
+  @override
   DateTime deadline;
+  @override
+  RepeatType repeatType;
+  Task({
+    required this.eventName,
+    required this.from,
+    required this.to,
+    required this.background,
+    required this.isAllDay,
+    required this.taskDifficulty,
+    required this.taskType,
+    required this.taskImportance,
+    required this.taskStatus,
+    required this.deadline,
+    required this.repeatType,
+  });
 }
 
 class MeetingDataSource extends CalendarDataSource {
@@ -64,7 +94,7 @@ class MeetingDataSource extends CalendarDataSource {
   }
 }
 
-List<Task> getTasks() {
+Future<List<Task>> getTasks() async {
   final List<Task> tasks = <Task>[];
   return tasks;
 }
