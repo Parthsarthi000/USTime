@@ -9,7 +9,7 @@ enum RepeatType { noRepeat, daily, weekly }
 
 enum Type { fixed, canShift }
 
-enum Status { completed, toDo, missed }
+enum Status { completed, toDo, missed, deleted }
 
 abstract class TaskInterface {
   String get eventName;

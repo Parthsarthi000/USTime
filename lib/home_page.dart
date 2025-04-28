@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_manager/DataBaseStuff/crud_ops.dart';
+import 'add_task_page.dart';
 import 'drawer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'DataBaseStuff/taskschemata.dart';
@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   late bool homePage;
   final CalendarController _calendarController = CalendarController();
-  final DatabaseService databaseService = DatabaseService.instance;
+  // final DatabaseService databaseService = DatabaseService.instance;
   CalendarDataSource? tasksData;
   //getTasks function initialises the appointments variable in the class MeetingDataSource extends CalendarDataSource. Data from database needs to be fetched from getTasks()and updated acordingly
   @override
@@ -36,6 +36,14 @@ class HomePageState extends State<HomePage> {
     setState(() {
       tasksData = MeetingDataSource(taskList); // Update state properly
     });
+  }
+
+  void showDeleteDialogue() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog();
+        });
   }
 
   @override
@@ -83,12 +91,26 @@ class HomePageState extends State<HomePage> {
           ? Container()
           : SfCalendar(
               controller: _calendarController,
+              showWeekNumber: true,
               dataSource: tasksData,
               showNavigationArrow: true,
               showCurrentTimeIndicator: false,
               // initialSelectedDate: DateTime.now(),
               todayHighlightColor: Colors.red,
-            ),
+              onLongPress: (CalendarLongPressDetails details) {
+                if (details.targetElement == CalendarElement.calendarCell) {
+                  print(details.date);
+                  if (details.appointments != null) {
+                    showDeleteDialogue();
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddTaskPage(
+                                date: details.date ?? DateTime.now())));
+                  }
+                }
+              }),
     );
   }
 }
