@@ -98,3 +98,8 @@ Future<List<Task>> getTasks() async {
   final List<Task> tasks = <Task>[];
   return tasks;
 }
+
+// List<Task> addTask(List<Task> tasks) {
+//   tasks.add();
+//   return tasks;
+// }

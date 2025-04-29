@@ -14,6 +14,8 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   late bool homePage;
   final CalendarController _calendarController = CalendarController();
+
+  List<Task> tasks = [];
   // final DatabaseService databaseService = DatabaseService.instance;
   CalendarDataSource? tasksData;
   //getTasks function initialises the appointments variable in the class MeetingDataSource extends CalendarDataSource. Data from database needs to be fetched from getTasks()and updated acordingly
@@ -32,9 +34,9 @@ class HomePageState extends State<HomePage> {
   }
 
   void fetchTasks() async {
-    List<Task> taskList = await getTasks(); // Await async function
+    // tasks = await getTasks();
     setState(() {
-      tasksData = MeetingDataSource(taskList); // Update state properly
+      // tasksData = MeetingDataSource(tasks);
     });
   }
 
@@ -95,19 +97,39 @@ class HomePageState extends State<HomePage> {
               dataSource: tasksData,
               showNavigationArrow: true,
               showCurrentTimeIndicator: false,
+              allowAppointmentResize: true,
+              onAppointmentResizeEnd: (AppointmentResizeEndDetails details) {
+                setState(() {
+                  print(
+                      "Resize Event Triggered! New Start: ${details.startTime}, New End: ${details.endTime}");
+                  Task updatedTask = details.appointment as Task;
+                  updatedTask.from = details.startTime!;
+                  updatedTask.to = details.endTime!;
+                  tasksData =
+                      MeetingDataSource(tasks); // Refresh calendar data source
+                });
+              },
               // initialSelectedDate: DateTime.now(),
               todayHighlightColor: Colors.red,
-              onLongPress: (CalendarLongPressDetails details) {
+              onLongPress: (CalendarLongPressDetails details) async {
                 if (details.targetElement == CalendarElement.calendarCell) {
-                  print(details.date);
                   if (details.appointments != null) {
                     showDeleteDialogue();
                   } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddTaskPage(
-                                date: details.date ?? DateTime.now())));
+                    final newTask = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AddTaskPage(date: details.date ?? DateTime.now()),
+                      ),
+                    );
+
+                    if (newTask != null && newTask is Task) {
+                      setState(() {
+                        tasks.add(newTask);
+                        tasksData = MeetingDataSource(tasks);
+                      });
+                    }
                   }
                 }
               }),

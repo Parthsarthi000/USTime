@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'DataBaseStuff/taskschemata.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
@@ -29,6 +29,7 @@ class AddTaskPageState extends State<AddTaskPage> {
     isAllDay = false;
   }
 
+  final eventName = TextEditingController();
   Difficulty get selectedDifficulty {
     return Difficulty.values[difficulty.toInt()];
   }
@@ -45,24 +46,50 @@ class AddTaskPageState extends State<AddTaskPage> {
     return RepeatType.values[repeatType];
   }
 
+  Task saveTask() {
+    return Task(
+        eventName: eventName.text.trim().isEmpty ? "Task" : eventName.text,
+        from: startTime,
+        to: endTime,
+        background: difficulty == 0
+            ? Colors.green
+            : difficulty == 1
+                ? Colors.orange
+                : Colors.red,
+        isAllDay: isAllDay,
+        taskDifficulty: selectedDifficulty,
+        taskType: selectedType,
+        taskImportance: selectedImportance,
+        taskStatus: Status.values[1],
+        deadline: deadline,
+        repeatType: selectedRepeatType);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Add Task"),
           centerTitle: true,
-          actions: [TextButton(onPressed: () {}, child: Text("Save"))],
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context, saveTask());
+                },
+                child: const Text("Save"))
+          ],
         ),
         body: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const TextField(
-                      decoration: InputDecoration(
-                    labelText: "Task Name",
-                    border: OutlineInputBorder(),
-                  )),
+                  TextField(
+                      controller: eventName,
+                      decoration: const InputDecoration(
+                        labelText: "Task Name",
+                        border: OutlineInputBorder(),
+                      )),
                   DateTimePicker(
                     type: DateTimePickerType
                         .dateTime, // ✅ Enables both date & time
@@ -89,6 +116,7 @@ class AddTaskPageState extends State<AddTaskPage> {
                     ),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const Text("Mark activity for entire day?"),
                       Checkbox(
