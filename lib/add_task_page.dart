@@ -49,6 +49,7 @@ class AddTaskPageState extends State<AddTaskPage> {
 
   Task saveTask() {
     return Task(
+        dayNumber: 0,
         eventName: eventName.text.trim().isEmpty ? "Task" : eventName.text,
         from: startTime,
         to: endTime,

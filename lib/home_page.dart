@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'add_task_page.dart';
 import 'drawer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -16,7 +18,7 @@ class HomePageState extends State<HomePage> {
   late DateTime loginDate;
   final CalendarController _calendarController = CalendarController();
   List<Task> tasks = [];
-  // final DatabaseService databaseService = DatabaseService.instance;
+  final DatabaseService databaseService = DatabaseService.instance;
   CalendarDataSource? tasksData;
   //getTasks function initialises the appointments variable in the class MeetingDataSource extends CalendarDataSource. Data from database needs to be fetched from getTasks()and updated acordingly
   @override
@@ -25,6 +27,12 @@ class HomePageState extends State<HomePage> {
     homePage = true;
     _calendarController.view = CalendarView.day;
     fetchTasks();
+    ftechLoginDate();
+  }
+
+  Future<void> ftechLoginDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    loginDate = DateFormat('yyyy-MM-dd').parse(prefs.getString("loginDate")!);
   }
 
   void switchToCalendar() {
@@ -34,9 +42,9 @@ class HomePageState extends State<HomePage> {
   }
 
   void fetchTasks() async {
-    // tasks = await getTasks();
+    tasks = await databaseService.fetchMyTasksOnAppStart();
     setState(() {
-      // tasksData = MeetingDataSource(tasks);
+      tasksData = MeetingDataSource(tasks);
     });
   }
 
@@ -113,12 +121,16 @@ class HomePageState extends State<HomePage> {
                             AddTaskPage(date: details.date ?? DateTime.now()),
                       ),
                     );
-
                     if (newTask != null && newTask is Task) {
+                      DateTime today = DateTime.now();
+                      Duration difference = today.difference(loginDate);
+                      int dayNumber = difference.inDays;
+                      newTask.dayNumber = dayNumber;
                       setState(() {
                         tasks.add(newTask);
                         tasksData = MeetingDataSource(tasks);
                       });
+                      databaseService.addTaskTodatabase(newTask);
                     }
                   }
                 }

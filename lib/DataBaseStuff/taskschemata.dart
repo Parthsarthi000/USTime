@@ -13,6 +13,7 @@ enum Status { completed, toDo, missed, deleted }
 
 abstract class TaskInterface {
   String get eventName;
+  int get dayNumber;
   DateTime get from;
   DateTime get to;
   Color get background;
@@ -26,6 +27,8 @@ abstract class TaskInterface {
 }
 
 class Task extends TaskInterface {
+  @override
+  int dayNumber;
   @override
   String eventName;
   @override
@@ -49,6 +52,7 @@ class Task extends TaskInterface {
   @override
   RepeatType repeatType;
   Task({
+    required this.dayNumber,
     required this.eventName,
     required this.from,
     required this.to,
@@ -99,7 +103,7 @@ Future<List<Task>> getTasks() async {
   return tasks;
 }
 
-// List<Task> addTask(List<Task> tasks) {
+// Future<void> addTasktoDatabase(List<Task> tasks) {
 //   tasks.add();
 //   return tasks;
 // }
