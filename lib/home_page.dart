@@ -13,8 +13,8 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   late bool homePage;
+  late DateTime loginDate;
   final CalendarController _calendarController = CalendarController();
-
   List<Task> tasks = [];
   // final DatabaseService databaseService = DatabaseService.instance;
   CalendarDataSource? tasksData;
@@ -97,18 +97,8 @@ class HomePageState extends State<HomePage> {
               dataSource: tasksData,
               showNavigationArrow: true,
               showCurrentTimeIndicator: false,
-              allowAppointmentResize: true,
-              onAppointmentResizeEnd: (AppointmentResizeEndDetails details) {
-                setState(() {
-                  print(
-                      "Resize Event Triggered! New Start: ${details.startTime}, New End: ${details.endTime}");
-                  Task updatedTask = details.appointment as Task;
-                  updatedTask.from = details.startTime!;
-                  updatedTask.to = details.endTime!;
-                  tasksData =
-                      MeetingDataSource(tasks); // Refresh calendar data source
-                });
-              },
+              firstDayOfWeek: 1,
+
               // initialSelectedDate: DateTime.now(),
               todayHighlightColor: Colors.red,
               onLongPress: (CalendarLongPressDetails details) async {

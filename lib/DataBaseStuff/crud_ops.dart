@@ -61,9 +61,9 @@ class DatabaseService {
       onCreate: (db, version) async {
         await db.execute('''
         CREATE TABLE $tasksTable(
-          weekNumber INTEGER NOT NULL,
-          id INTEGER NOT NULL,
-          PRIMARY KEY (weekNumber, id),
+          dayNumber INTEGER NOT NULL,
+          taskId INTEGER NOT NULL,
+          PRIMARY KEY (dayNumber, taskId),
           eventName TEXT NOT NULL,
           from TEXT NOT NULL,
           to TEXT NOT NULL,

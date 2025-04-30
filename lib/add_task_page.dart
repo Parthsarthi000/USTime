@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'DataBaseStuff/taskschemata.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
@@ -9,6 +8,8 @@ class AddTaskPage extends StatefulWidget {
   @override
   State<AddTaskPage> createState() => AddTaskPageState();
 }
+// i was passing tasks list to this widget and then sending it update back
+//realised i could just return a single task object
 
 class AddTaskPageState extends State<AddTaskPage> {
   late DateTime date;
