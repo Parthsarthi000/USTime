@@ -45,9 +45,17 @@ class HomePageState extends State<HomePage> {
 
   void fetchTasks() async {
     tasks = await databaseService.fetchMyTasksOnAppStart();
-    print(tasks.length);
+
     setState(() {
-      tasksData = MeetingDataSource(tasks);
+      currentDay = DateTime.now(); // ✅ Get today's date
+      currentDayTasks = tasks
+          .where((task) =>
+              task.from.year == currentDay.year &&
+              task.from.month == currentDay.month &&
+              task.from.day == currentDay.day)
+          .toList(); // ✅ Filter tasks for today
+
+      tasksData = MeetingDataSource(tasks); // ✅ Display only today's tasks
     });
   }
 
@@ -95,6 +103,42 @@ class HomePageState extends State<HomePage> {
     databaseService.deleteTaskFromDatabase(task); // ✅ Remove from database
   }
 
+  void moveday(String tense) {
+    setState(() {
+      if (tense == "past") {
+        currentDay =
+            currentDay.subtract(const Duration(days: 1)); // ✅ Move one day back
+      } else {
+        currentDay =
+            currentDay.add(const Duration(days: 1)); // ✅ Move one day forward
+      }
+
+      // ✅ Filter tasks for the new day
+      currentDayTasks = tasks
+          .where((task) =>
+              task.from.year == currentDay.year &&
+              task.from.month == currentDay.month &&
+              task.from.day == currentDay.day)
+          .toList();
+    });
+  }
+
+  // ✅ Place helper function below the build method
+  Widget _buildCategoryCard(String title, Color color) {
+    return Card(
+      elevation: 6,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: color,
+      child: Center(
+        child: Text(title,
+            style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,93 +173,135 @@ class HomePageState extends State<HomePage> {
         ),
         drawer: const AppDrawer(),
         body: homePage
-            ? Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                // decoration: BoxDecoration(
-                //   gradient: LinearGradient(
-                //     colors: [
-                //       Colors.blue.shade400,
-                //       Colors.blue.shade900
-                //     ], // ✅ Background gradient
-                //     begin: Alignment.topLeft,
-                //     end: Alignment.bottomRight,
-                //   ),
-                // ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.arrow_back_outlined)),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Card(
-                            elevation: 6,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: RichText(
-                                text: const TextSpan(
-                                  text: "Today is: ", // ✅ Default text
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                      text: "Stressful", // ✅ Highlighted part
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
+            ? SingleChildScrollView(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  moveday("past");
+                                },
+                                icon: const Icon(Icons.arrow_back_outlined)),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Card(
+                              elevation: 6,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: RichText(
+                                  text: const TextSpan(
+                                    text: "Today is: ", // ✅ Default text
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                    children: [
+                                      TextSpan(
+                                        text: "Stressful", // ✅ Highlighted part
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.arrow_forward_outlined)),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  moveday("future");
+                                },
+                                icon: const Icon(Icons.arrow_forward_outlined)),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 30), // ✅ Spacing
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: ListView.builder(
+                          itemCount: currentDayTasks
+                              .length, // ✅ Display tasks dynamically
+                          itemBuilder: (context, index) {
+                            Task task = currentDayTasks[index];
+                            return Card(
+                              elevation: 4,
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: ListTile(
+                                leading: SizedBox(
+                                  width: 8, // ✅ Small width for rectangle
+                                  height: double
+                                      .infinity, // ✅ Full height of ListTile
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: task
+                                          .background, // ✅ Uses task color dynamically
+                                      borderRadius: const BorderRadius
+                                          .horizontal(
+                                          left: Radius.circular(
+                                              4)), // ✅ Slight curve for style
+                                    ),
+                                  ),
+                                ),
+                                title: Text(task.eventName,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                subtitle: Text(
+                                    "Due: ${task.from.toLocal().toString().split(' ')[0]}"),
+                                trailing: Checkbox(
+                                  value: task.taskStatus ==
+                                      Status
+                                          .completed, // ✅ Checkbox reflects completion state
+                                  onChanged: (bool? newValue) {
+                                    setState(() {
+                                      task.taskStatus = newValue!
+                                          ? Status.completed
+                                          : Status
+                                              .toDo; // ✅ Toggle between Completed & To-Do
+                                    });
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20), // ✅ Spacing before GridView
+                      GridView.count(
+                        shrinkWrap:
+                            true, // ✅ Prevents unnecessary scrolling inside ScrollView
+                        physics:
+                            NeverScrollableScrollPhysics(), // ✅ Disables GridView scrolling
+                        crossAxisCount: 2, // ✅ Creates 2 columns
+                        mainAxisSpacing: 10, // ✅ Vertical spacing
+                        crossAxisSpacing: 10, // ✅ Horizontal spacing
+                        childAspectRatio: 1.5, // ✅ Adjusts card proportions
+                        padding: const EdgeInsets.all(16),
+                        children: [
+                          _buildCategoryCard("Social", Colors.blue),
+                          _buildCategoryCard("Physical", Colors.green),
+                          _buildCategoryCard("Academics", Colors.orange),
+                          _buildCategoryCard("Goals", Colors.purple),
                         ],
                       ),
-                    ),
-
-                    SizedBox(height: 30), // ✅ Spacing
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      child: ListView.builder(
-                        itemCount: tasks.length, // ✅ Display tasks dynamically
-                        itemBuilder: (context, index) {
-                          Task task = tasks[index];
-                          return Card(
-                            elevation: 4,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: ListTile(
-                              title: Text(task.eventName,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              subtitle: Text(
-                                  "Due: ${task.from.toLocal().toString().split(' ')[0]}"),
-                              // trailing: Icon(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               )
             : SfCalendar(
