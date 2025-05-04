@@ -171,4 +171,19 @@ class DatabaseService {
     await db.insert(tasksTable, DatabaseTask.fromTask(task).toMap());
     return;
   }
+
+  Future<void> deleteTaskFromDatabase(Task task) async {
+    final db = await database;
+    await db.delete(
+      tasksTable, // ✅ Table name
+      where:
+          "eventName = ? AND dayNumber = ? AND startTime = ?", // ✅ Match primary key
+      whereArgs: [
+        task.eventName,
+        task.dayNumber,
+        task.from.toIso8601String()
+      ], // ✅ Correct values for query
+    );
+    return;
+  }
 }
