@@ -6,6 +6,7 @@ import 'drawer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'DataBaseStuff/taskschemata.dart';
 import 'DataBaseStuff/crud_ops.dart';
+import 'demopurpose.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +23,7 @@ class HomePageState extends State<HomePage> {
   late DateTime currentDay;
   final DatabaseService databaseService = DatabaseService.instance;
   CalendarDataSource? tasksData;
+  int AIButtonCount = 0;
   //getTasks function initialises the appointments variable in the class MeetingDataSource extends CalendarDataSource. Data from database needs to be fetched from getTasks()and updated acordingly
   @override
   void initState() {
@@ -139,6 +141,19 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  void addTasksOnAIButtonPress() {
+    setState(() {
+      AIButtonCount += 1;
+      switch (AIButtonCount) {
+        case 1:
+          tasks.addAll(onPress1Tasks);
+        default:
+          break;
+      }
+      tasksData = MeetingDataSource(tasks);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -232,7 +247,7 @@ class HomePageState extends State<HomePage> {
 
                       const SizedBox(height: 30), // ✅ Spacing
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.7,
                         child: ListView.builder(
                           itemCount: currentDayTasks
                               .length, // ✅ Display tasks dynamically
@@ -283,23 +298,23 @@ class HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 20), // ✅ Spacing before GridView
-                      GridView.count(
-                        shrinkWrap:
-                            true, // ✅ Prevents unnecessary scrolling inside ScrollView
-                        physics:
-                            NeverScrollableScrollPhysics(), // ✅ Disables GridView scrolling
-                        crossAxisCount: 2, // ✅ Creates 2 columns
-                        mainAxisSpacing: 10, // ✅ Vertical spacing
-                        crossAxisSpacing: 10, // ✅ Horizontal spacing
-                        childAspectRatio: 1.5, // ✅ Adjusts card proportions
-                        padding: const EdgeInsets.all(16),
-                        children: [
-                          _buildCategoryCard("Social", Colors.blue),
-                          _buildCategoryCard("Physical", Colors.green),
-                          _buildCategoryCard("Academics", Colors.orange),
-                          _buildCategoryCard("Goals", Colors.purple),
-                        ],
-                      ),
+                      // GridView.count(
+                      //   shrinkWrap:
+                      //       true, // ✅ Prevents unnecessary scrolling inside ScrollView
+                      //   physics:
+                      //       NeverScrollableScrollPhysics(), // ✅ Disables GridView scrolling
+                      //   crossAxisCount: 2, // ✅ Creates 2 columns
+                      //   mainAxisSpacing: 10, // ✅ Vertical spacing
+                      //   crossAxisSpacing: 10, // ✅ Horizontal spacing
+                      //   childAspectRatio: 1.5, // ✅ Adjusts card proportions
+                      //   padding: const EdgeInsets.all(16),
+                      //   children: [
+                      //     _buildCategoryCard("Social", Colors.blue),
+                      //     _buildCategoryCard("Physical", Colors.green),
+                      //     _buildCategoryCard("Academics", Colors.orange),
+                      //     _buildCategoryCard("Goals", Colors.purple),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
@@ -311,7 +326,17 @@ class HomePageState extends State<HomePage> {
                 showNavigationArrow: true,
                 showCurrentTimeIndicator: false,
                 firstDayOfWeek: 1,
-
+                timeSlotViewSettings: const TimeSlotViewSettings(
+                  numberOfDaysInView: 3,
+                  timeInterval:
+                      Duration(minutes: 70), // ✅ Increase slot spacing
+                  timeIntervalHeight: 50,
+                ), // ✅ Expand row height to fit text),
+                appointmentTextStyle: const TextStyle(
+                  fontSize: 15,
+                  // fontWeight: FontWeight.bold,
+                  color: Colors.white, // ✅ Ensures clear contrast
+                ),
                 // initialSelectedDate: DateTime.now(),
                 todayHighlightColor: Colors.red,
                 onLongPress: (CalendarLongPressDetails details) async {
@@ -351,7 +376,9 @@ class HomePageState extends State<HomePage> {
                   }
                 }),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            addTasksOnAIButtonPress();
+          },
           tooltip: "Generate a Schedule for the week",
           child: const Icon(Icons.generating_tokens),
         ));
