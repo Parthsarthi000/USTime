@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profilepage.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -21,22 +22,25 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            leading: const Icon(Icons.person),
+            title: const Text('Your Profile'),
             onTap: () {
-              Navigator.of(context).pushNamed('/home');
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => UserProfilePage()), // ✅ Direct push
+              );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
+            leading: const Icon(Icons.analytics),
+            title: const Text('Progress Report'),
             onTap: () {
               Navigator.of(context).pushNamed('/settings');
             },
           ),
           ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('About'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
             onTap: () {
               Navigator.of(context).pushNamed('/about');
             },
