@@ -126,20 +126,20 @@ class HomePageState extends State<HomePage> {
   }
 
   // ✅ Place helper function below the build method
-  Widget _buildCategoryCard(String title, Color color) {
-    return Card(
-      elevation: 6,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: color,
-      child: Center(
-        child: Text(title,
-            style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white)),
-      ),
-    );
-  }
+  // Widget _buildCategoryCard(String title, Color color) {
+  //   return Card(
+  //     elevation: 6,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //     color: color,
+  //     child: Center(
+  //       child: Text(title,
+  //           style: const TextStyle(
+  //               fontSize: 18,
+  //               fontWeight: FontWeight.bold,
+  //               color: Colors.white)),
+  //     ),
+  //   );
+  // }
 
   void addTasksOnAIButtonPress() {
     setState(() {
@@ -214,17 +214,21 @@ class HomePageState extends State<HomePage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
                                 child: RichText(
-                                  text: const TextSpan(
-                                    text: "Today is: ", // ✅ Default text
-                                    style: TextStyle(
+                                  text: TextSpan(
+                                    text: "Today is ", // ✅ Default text
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                     children: [
                                       TextSpan(
-                                        text: "Stressful", // ✅ Highlighted part
+                                        text: AIButtonCount == 0
+                                            ? "Peaceful"
+                                            : "Stressful", // ✅ Highlighted part
                                         style: TextStyle(
-                                            color: Colors.red,
+                                            color: AIButtonCount == 0
+                                                ? Colors.green
+                                                : Colors.red,
                                             fontSize: 22,
                                             fontWeight: FontWeight.w600),
                                       ),
