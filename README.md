@@ -1,16 +1,27 @@
-# time_manager
+# USTime
 
-A new Flutter project.
+USTime is a design concept for a productivity and habit-forming app designed to help UST students—especially Year 1s—build discipline, manage time effectively, and navigate university life with confidence.
 
-## Getting Started
+## Purpose
 
-This project is a starting point for a Flutter application.
+Planning your day shouldn't feel like a second job. UST Scheduler streamlines your daily and weekly scheduling, integrates your class timetable, to-do lists, and study goals, and helps you stay on top of everything—from assignments to exam prep.
 
-A few resources to get you started if this is your first Flutter project:
+## Key Concepts
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Timetable + To-Do Integration**  
+  Input your class schedule and daily tasks. The app generates a personalized daily plan that fits your academic and personal goals.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Weekly Task Optimization**  
+  Add tasks for the entire week and let the app create a smart, balanced schedule that adapts to your availability.
+
+- **Gamified Habit Formation**  
+  Build discipline through fun challenges, memes, and motivational nudges that make productivity feel rewarding.
+
+- **AI-Powered Exam Prep**  
+  Tell the app how difficult a course feels and how much time you need. It generates a stress-reducing study schedule tailored to your needs.
+
+## Why It Matters
+
+Students often waste valuable time just organizing their day. UST Scheduler eliminates that friction, giving you clarity, structure, and motivation—all in one place.
+
+
